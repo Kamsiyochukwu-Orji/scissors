@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
-import type { Id } from 'convex/values'
+import type { Id } from "../../convex/_generated/dataModel";
 import { Button } from './ui/Button'
 import { Modal } from './ui/Modal'
 import { BulkDeleteDialog } from './BulkDeleteDialog'
