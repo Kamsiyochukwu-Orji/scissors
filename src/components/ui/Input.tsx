@@ -16,7 +16,7 @@ export function Input({
   id,
   ...props
 }: InputProps) {
-  const inputId = id ?? label?.toLowerCase().replace(/\s+/g!, '-')
+  const inputId = id ?? label?.toLowerCase().replace(/\s+/g, '-')
 
   return (
     <div className="w-full">
