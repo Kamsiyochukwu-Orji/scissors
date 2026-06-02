@@ -1,8 +1,8 @@
 export default {
   providers: [
     {
-      domain: process.env.CLERK_JWT_ISSUER_DOMAIN,
-      applicationID: 'convex',
+      domain: "https://subtle-donkey-46.clerk.accounts.dev",
+      applicationID: "convex",
     },
   ],
-}
+};
