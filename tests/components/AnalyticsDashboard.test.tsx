@@ -1,24 +1,22 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 
-// Mock Recharts to avoid canvas/SVG rendering issues in jsdom
 vi.mock('recharts', () => ({
-  LineChart: ({ children }: any) => <div data-testid="line-chart">{children}</div>,
+  LineChart: ({ children }: { children: React.ReactNode }) => <div data-testid="line-chart">{children}</div>,
   Line: () => null,
-  BarChart: ({ children }: any) => <div data-testid="bar-chart">{children}</div>,
+  BarChart: ({ children }: { children: React.ReactNode }) => <div data-testid="bar-chart">{children}</div>,
   Bar: () => null,
-  PieChart: ({ children }: any) => <div data-testid="pie-chart">{children}</div>,
+  PieChart: ({ children }: { children: React.ReactNode }) => <div data-testid="pie-chart">{children}</div>,
   Pie: () => null,
   Cell: () => null,
   XAxis: () => null,
   YAxis: () => null,
   CartesianGrid: () => null,
   Tooltip: () => null,
-  ResponsiveContainer: ({ children }: any) => <div>{children}</div>,
+  ResponsiveContainer: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   Legend: () => null,
 }))
 
-// Mock Convex
 vi.mock('convex/react', () => ({
   useQuery: vi.fn(),
 }))
@@ -31,23 +29,27 @@ vi.mock('../../convex/_generated/api', () => ({
     },
   },
 }))
-
 vi.mock('convex/values', () => ({}))
 
+import React from 'react'
 import { useQuery } from 'convex/react'
 import { AnalyticsDashboard } from '../../src/components/AnalyticsDashboard'
+import type { Id } from '../../convex/_generated/dataModel'
 
-const mockLinkId = 'j57abc123' as any
+// Properly typed mock helper — avoids sprinkling `as any` everywhere
+const mockUseQuery = vi.mocked(useQuery as (...args: unknown[]) => unknown)
+
+const mockLinkId = 'j57abc123' as Id<'links'>
 
 describe('AnalyticsDashboard', () => {
   it('renders the dashboard container', () => {
-    vi.mocked(useQuery).mockReturnValue(undefined)
+    mockUseQuery.mockReturnValue(undefined)
     render(<AnalyticsDashboard linkId={mockLinkId} />)
     expect(screen.getByTestId('analytics-dashboard')).toBeInTheDocument()
   })
 
   it('shows "no click data" when clicks are empty', () => {
-    vi.mocked(useQuery).mockImplementation((query: any) => {
+    mockUseQuery.mockImplementation((query) => {
       if (query === 'analytics:getClicksOverTime') return []
       if (query === 'analytics:getTopReferrers') return []
       if (query === 'analytics:getDeviceBreakdown') return []
@@ -62,7 +64,7 @@ describe('AnalyticsDashboard', () => {
       date: `2026-05-${String(i + 1).padStart(2, '0')}`,
       clicks: i + 1,
     }))
-    vi.mocked(useQuery).mockImplementation((query: any) => {
+    mockUseQuery.mockImplementation((query) => {
       if (query === 'analytics:getClicksOverTime') return clickData
       if (query === 'analytics:getTopReferrers') return [{ referrer: 'google.com', count: 10 }]
       if (query === 'analytics:getDeviceBreakdown') return [{ device: 'desktop', count: 20 }]
@@ -77,7 +79,7 @@ describe('AnalyticsDashboard', () => {
       { date: '2026-05-30', clicks: 5 },
       { date: '2026-05-31', clicks: 10 },
     ]
-    vi.mocked(useQuery).mockImplementation((query: any) => {
+    mockUseQuery.mockImplementation((query) => {
       if (query === 'analytics:getClicksOverTime') return clickData
       return []
     })
