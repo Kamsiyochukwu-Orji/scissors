@@ -64,12 +64,6 @@ export class ErrorBoundary extends React.Component<Props, State> {
                   <p className="text-xs font-mono text-gray-700 overflow-auto max-h-32">
                     <strong>Error:</strong> {this.state.error.toString()}
                   </p>
-                  {this.state.errorInfo && (
-                    <p className="text-xs font-mono text-gray-600 mt-2 overflow-auto max-h-32">
-                      <strong>Details:</strong>{" "}
-                      {this.state.errorInfo.componentStack}
-                    </p>
-                  )}
                 </div>
               )}
 
