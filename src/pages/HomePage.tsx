@@ -1,18 +1,9 @@
 import { useUser, SignInButton, UserButton } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 import { ShortenForm } from "../components/ShortenForm";
-import { useState } from "react";
 
 export function HomePage() {
   const { isSignedIn } = useUser();
-  const [testError, setTestError] = useState(false);
-
-  // Trigger error for testing ErrorBoundary
-  if (testError) {
-    throw new Error(
-      '🧪 Test Error Boundary - This is intentional! Click "Try Again" in the error page.',
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
@@ -43,17 +34,6 @@ export function HomePage() {
                   Sign in
                 </button>
               </SignInButton>
-            )}
-
-            {/* Test Error Button (Dev Only) */}
-            {import.meta.env.DEV && (
-              <button
-                onClick={() => setTestError(true)}
-                className="text-xs bg-red-500 hover:bg-red-600 text-white px-2 py-2 rounded transition-colors"
-                title="Click to test ErrorBoundary"
-              >
-                Test Error
-              </button>
             )}
           </div>
         </div>
